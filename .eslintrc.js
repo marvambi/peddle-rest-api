@@ -22,7 +22,7 @@ module.exports = {
     'no-multiple-empty-lines': 'error',
     'prefer-const': 'error',
     'no-use-before-define': 'error',
-    'max-len': ['error', 150],
+    'max-len': ['error', 80],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

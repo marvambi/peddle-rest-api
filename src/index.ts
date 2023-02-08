@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieSession from 'cookie-session';
+import cors from 'cors';
 import { connectToDatabase } from './mongoDBConnection';
 import { roleRoute } from './routes/role.route';
 import { userRoute } from './routes/user.route';
@@ -10,6 +12,11 @@ const HOST = process.env.HOST || 'http://localhost';
 const PORT = parseInt(process.env.PORT || '4500');
 
 const app = express();
+const corsOptions = {
+  origin: 'http://localhost:8081',
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

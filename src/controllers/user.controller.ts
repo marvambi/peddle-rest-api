@@ -89,7 +89,24 @@ const createUser = asyncHandler(async (req: any, res: any) => {
 const getAllUsers = async (req: Request, res: Response) => {
   const users = await User.find().populate('role').sort('-createdAt').exec();
 
-  return res.status(200).json({ data: users });
+  if (!users.length) {
+    return res.status(400).json({
+      message: 'No users found',
+    });
+  }
+  // const users_to_return = users.map((user) => {
+  //   const { password, ...rest } = user;
+  //   const { _id, enabled, fullName, role } = rest;
+
+  //   return { _id, fullName, enabled, role };
+  // });
+  const data = users.map((us) => {
+    const { _id, email, enabled, fullName, role } = us;
+
+    return { _id, email, enabled, fullName, role };
+  });
+
+  return res.status(200).json({ data });
 };
 
 const getUser = asyncHandler(async (req: any, res: any) => {

@@ -1,0 +1,359 @@
+{
+	"info": {
+		"_postman_id": "5da27d27-43a6-4e7a-8c37-1366661c4989",
+		"name": "Peddle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3548010"
+	},
+	"item": [
+		{
+			"name": "index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4500/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4500",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "index",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4500/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4500",
+							"path": [
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "92"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"5c-vqzSynV3Qah17QDNSdr6n4D2eNk\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 08 Feb 2023 16:19:50 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"'Wow! 👉' Node.js RESTful API & React Storefront are great combinations 😇\"\n}"
+				}
+			]
+		},
+		{
+			"name": "create_role",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"SUPER_ADMIN\",\n    \"description\": \"This is a SUPER_ADMIN role\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4500/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4500",
+					"path": [
+						"roles"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "create_role",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"SUPER_ADMIN\",\n    \"description\": \"This is a SUPER_ADMIN role\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4500/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4500",
+							"path": [
+								"roles"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "193"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c1-w6yCGCpK7nJFvq7hc81ky/ePVj0\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 08 Feb 2023 17:04:49 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": {\n        \"name\": \"SUPER_ADMIN\",\n        \"description\": \"This is a SUPER_ADMIN role\",\n        \"_id\": \"63e3d631343cafe40f7ea33d\",\n        \"createdAt\": \"2023-02-08T17:04:49.634Z\",\n        \"updatedAt\": \"2023-02-08T17:04:49.634Z\",\n        \"__v\": 0\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "get_roles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fullName\": \"Marvin Ambrose\",\n    \"email\": \"info@presenti.ng\",\n    \"password\": \"_CharXP3t\",\n    \"enabled\": true,\n    \"role\": \"Some#$5443\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4500/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4500",
+					"path": [
+						"roles"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get_roles",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Marvin Ambrose\",\n    \"email\": \"info@presenti.ng\",\n    \"password\": \"_CharXP3t\",\n    \"enabled\": true,\n    \"role\": \"Some#$5443\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4500/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4500",
+							"path": [
+								"roles"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1300"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"514-eHegg9f3wrNHuyY6RgErFMuVoos\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 08 Feb 2023 17:06:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"_id\": \"63e3d631343cafe40f7ea33d\",\n            \"name\": \"SUPER_ADMIN\",\n            \"description\": \"This is a SUPER_ADMIN role\",\n            \"createdAt\": \"2023-02-08T17:04:49.634Z\",\n            \"updatedAt\": \"2023-02-08T17:04:49.634Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"63e3cdedc7615988979ac07a\",\n            \"name\": \"SUPER_ADMIN\",\n            \"description\": \"This is a SUPER_ADMIN role\",\n            \"createdAt\": \"2023-02-08T16:29:33.506Z\",\n            \"updatedAt\": \"2023-02-08T16:29:33.506Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"63e3cddfc7615988979ac078\",\n            \"name\": \"GUEST\",\n            \"description\": \"This is a GUEST role\",\n            \"createdAt\": \"2023-02-08T16:29:19.879Z\",\n            \"updatedAt\": \"2023-02-08T16:29:19.879Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"63e3cdd5c7615988979ac076\",\n            \"name\": \"USER\",\n            \"description\": \"This is a USER role\",\n            \"createdAt\": \"2023-02-08T16:29:09.614Z\",\n            \"updatedAt\": \"2023-02-08T16:29:09.614Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"63e3cd96c7615988979ac074\",\n            \"name\": \"SUPER_USER\",\n            \"description\": \"This is a SUPER_USER administrator\",\n            \"createdAt\": \"2023-02-08T16:28:06.986Z\",\n            \"updatedAt\": \"2023-02-08T16:28:06.986Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"63e3cd23b0a47c66d5b581ac\",\n            \"name\": \"SUPER_USER\",\n            \"description\": \"This is a SUPER_USER administrator\",\n            \"createdAt\": \"2023-02-08T16:26:11.786Z\",\n            \"updatedAt\": \"2023-02-08T16:26:11.786Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"63e3cc9f56822dc8eadef519\",\n            \"name\": \"SUPER_USER\",\n            \"description\": \"This is a SUPER_USER administrator\",\n            \"createdAt\": \"2023-02-08T16:23:59.103Z\",\n            \"updatedAt\": \"2023-02-08T16:23:59.103Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "create_user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fullName\": \"Paddy Mark\",\n    \"email\": \"info@presenti.ng\",\n    \"password\": \"_XP3T$33\",\n    \"enabled\": true,\n    \"role\": \"63e3cdedc7615988979ac07a\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4500/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4500",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "create_user",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Paddy Mark\",\n    \"email\": \"info@presenti.ng\",\n    \"password\": \"_XP3T$33\",\n    \"enabled\": true,\n    \"role\": \"63e3cdedc7615988979ac07a\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4500/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4500",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "371"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"173-tjjxpqI757awto/phb5jBQWuN0M\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 08 Feb 2023 16:52:19 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": {\n        \"fullName\": \"Paddy Mark\",\n        \"email\": \"info@presenti.ng\",\n        \"password\": \"d3fe504e6df99d56f7cdeea96cfdb1fbfe4c4a973a2d2f476af1b74332f17aec39a8fe2d3a89512ab084f60372315a0a5f3918aead8da964c181b27acbe96400\",\n        \"enabled\": true,\n        \"role\": \"63e3cdedc7615988979ac07a\",\n        \"_id\": \"63e3d343af555cbdb3640c41\",\n        \"createdAt\": \"2023-02-08T16:52:19.909Z\",\n        \"updatedAt\": \"2023-02-08T16:52:19.909Z\",\n        \"__v\": 0\n    }\n}"
+				}
+			]
+		}
+	]
+}

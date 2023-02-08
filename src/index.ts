@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { connectToDatabase } from './mongoDBConnection';
 import { roleRoute } from './routes/role.route';
+import { userRoute } from './routes/user.route';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // configure app.use middle-ware here to prevent route not found error
 app.use('/', roleRoute());
+app.use('/', userRoute());
 
 app.get('/', (req, res) => {
   const checkSystem = (server: string, client: string) => {

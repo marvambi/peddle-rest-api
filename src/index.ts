@@ -1,5 +1,5 @@
 const checkSystem = (server: string, client: string) => {
-  return `${server}, & ${client} are a great combination 😇`;
+  return `${server} & ${client} are a great combination 😇`;
 };
 
 const the_server = "Node.js RESTful API";

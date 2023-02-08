@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 mongoose.Promise = global.Promise;
 dotenv.config();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } = process.env;
 
 const connectToDatabase = async (): Promise<void> => {

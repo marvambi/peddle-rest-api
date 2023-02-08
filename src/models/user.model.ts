@@ -6,6 +6,8 @@ type UserDocument = Document & {
   password: string;
   enabled: string;
   role: string;
+  hash: string;
+  salt: string;
 };
 
 type UserInput = {
@@ -14,6 +16,7 @@ type UserInput = {
   password: UserDocument['password'];
   enabled: UserDocument['enabled'];
   role: UserDocument['role'];
+  salt: UserDocument['salt'];
 };
 
 const usersSchema = new Schema(
@@ -40,6 +43,12 @@ const usersSchema = new Schema(
       ref: 'Role',
       required: true,
       index: true,
+    },
+    hash: {
+      type: Schema.Types.String,
+    },
+    salt: {
+      type: Schema.Types.String,
     },
   },
   {

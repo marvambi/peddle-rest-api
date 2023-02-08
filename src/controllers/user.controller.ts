@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import dotenv from 'dotenv';
@@ -11,9 +12,9 @@ const secretz: any = !process.env.JWT_SECRET === undefined ? process.env.JWT_SEC
 const generateToken = (id: string) => {
   return jwt.sign({ id }, secretz, { expiresIn: '1d' });
 };
-
+let salt;
 const hashPassword = (password: string) => {
-  const salt = crypto.randomBytes(16).toString('hex');
+  salt = crypto.randomBytes(16).toString('hex');
 
   // Hashing salt & password with 100 iterations, 64 length and sha512 digest
   return crypto.pbkdf2Sync(password, salt, 100, 64, `sha512`).toString(`hex`);
@@ -49,6 +50,7 @@ const createUser = asyncHandler(async (req: any, res: any) => {
     password: hashPassword(password),
     enabled,
     role,
+    salt,
   };
 
   const userCreated = await User.create(userInput);
@@ -90,7 +92,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   return res.status(200).json({ data: users });
 };
 
-const getUser = async (req: Request, res: Response) => {
+const getUser = asyncHandler(async (req: any, res: any) => {
   const { id } = req.params;
 
   const user = await User.findOne({ _id: id }).populate('role').exec();
@@ -98,9 +100,18 @@ const getUser = async (req: Request, res: Response) => {
   if (!user) {
     return res.status(404).json({ message: `User with id "${id}" not found.` });
   }
+  const { _id, email, enabled, fullName, role } = user;
 
-  return res.status(200).json({ data: user });
-};
+  return res.status(200).json({
+    data: {
+      _id,
+      fullName,
+      email,
+      enabled,
+      role,
+    },
+  });
+});
 
 const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -132,4 +143,89 @@ const deleteUser = async (req: Request, res: Response) => {
   return res.status(200).json({ message: 'User deleted successfully.' });
 };
 
-export { createUser, deleteUser, getAllUsers, getUser, updateUser };
+// Login User
+const loginUser = asyncHandler(async (req: any, res: any) => {
+  const { email, password } = req.body;
+
+  // Validate Request
+  if (!email || !password) {
+    res.status(400);
+    throw new Error('Please add email and password');
+  }
+
+  // Check if user exists
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({
+      message: 'User not found, please signup',
+    });
+  }
+
+  // User exists, check if password is correct
+  // eslint-disable-next-line max-len
+  const { salt } = user;
+  // eslint-disable-next-line max-len
+  const hash = crypto.pbkdf2Sync(password, salt, 100, 64, `sha512`).toString(`hex`);
+  const passwordIsCorrect = hash === user.password ? true : false;
+
+  //   Generate Token
+  const token = generateToken(user._id);
+
+  // Send HTTP-only cookie
+  res.cookie('token', token, {
+    path: '/',
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
+    sameSite: 'none',
+    secure: true,
+  });
+
+  if (user && passwordIsCorrect) {
+    const { _id, email, enabled, fullName, role } = user;
+
+    return res.status(200).json({
+      data: {
+        _id,
+        email,
+        enabled,
+        fullName,
+        role,
+        token,
+      },
+    });
+  } else {
+    return res.status(400).json({ message: 'Invalid email or password' });
+  }
+});
+
+// Logout User
+const logout = asyncHandler(async (req: any, res: any) => {
+  res.cookie('token', '', {
+    path: '/',
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: 'none',
+    secure: true,
+  });
+  return res.status(200).json({ message: 'Successfully Logged Out' });
+});
+
+// Get Login Status
+const loginStatus = asyncHandler(async (req: any, res: any) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.json(false);
+  }
+  // Verify Token
+  const verified = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (verified) {
+    return res.json(true);
+  }
+  return res.json(false);
+});
+
+// eslint-disable-next-line max-len
+export { createUser, deleteUser, getAllUsers, getUser, updateUser, loginUser, logout, loginStatus };

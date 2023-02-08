@@ -1,6 +1,6 @@
 import { Router } from 'express';
 // eslint-disable-next-line max-len
-import { createUser, deleteUser, getAllUsers, getUser, updateUser } from '../controllers/user.controller';
+import { createUser, deleteUser, getAllUsers, getUser, loginUser, logout, updateUser } from '../controllers/user.controller';
 
 const userRoute = () => {
   const router = Router();
@@ -14,6 +14,10 @@ const userRoute = () => {
   router.patch('/users/:id', updateUser);
 
   router.delete('/users/:id', deleteUser);
+
+  router.post('/users/login', loginUser);
+
+  router.post('/users/logout', logout);
 
   return router;
 };

@@ -12,12 +12,13 @@ const connectToDatabase = async (): Promise<void> => {
     autoIndex: false, // Don't build indexes
     maxPoolSize: 10, // Maintain up to 10 socket connections
     serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5
-    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+    socketTimeoutMS: 45000, // Close sockets after 45 seconds inactivity
     family: 4,
   };
 
   // eslint-disable-next-line max-len
-  await mongoose.connect(`mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, options);
+  // await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, options);
+  await mongoose.connect(`mongodb://127.0.0.1:27017/test`, options);
 };
 
 export { connectToDatabase };

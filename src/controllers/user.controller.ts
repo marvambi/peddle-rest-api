@@ -1,22 +1,25 @@
 import { Request, Response } from 'express';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-
+import asyncHandler from 'express-async-handler';
+import dotenv from 'dotenv';
+dotenv.config();
 import { User, UserInput } from '../models/user.model';
-
+// eslint-disable-next-line max-len
+const secretz: any = !process.env.JWT_SECRET === undefined ? process.env.JWT_SECRET : '5ytjjfbPK8ZJ';
 // Generate Token
 const generateToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  return jwt.sign({ id }, secretz, { expiresIn: '1d' });
 };
 
 const hashPassword = (password: string) => {
   const salt = crypto.randomBytes(16).toString('hex');
 
-  // Hashing salt and password with 100 iterations, 64 length and sha512 digest
+  // Hashing salt & password with 100 iterations, 64 length and sha512 digest
   return crypto.pbkdf2Sync(password, salt, 100, 64, `sha512`).toString(`hex`);
 };
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = asyncHandler(async (req: any, res: any) => {
   const { email, enabled, fullName, password, role } = req.body;
 
   // Validation
@@ -79,9 +82,7 @@ const createUser = async (req: Request, res: Response) => {
       message: 'Invalid user data',
     });
   }
-
-  // return res.status(201).json({ data: userCreated });
-};
+});
 
 const getAllUsers = async (req: Request, res: Response) => {
   const users = await User.find().populate('role').sort('-createdAt').exec();

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 // eslint-disable-next-line max-len
-import { createUser, deleteUser, getAllUsers, getUser, loginUser, logout, updateUser } from '../controllers/user.controller';
+import { createUser, deleteUser, getAllUsers, getUser, loginStatus, loginUser, logout, updateUser } from '../controllers/user.controller';
 
 const userRoute = () => {
   const router = Router();
@@ -18,6 +18,8 @@ const userRoute = () => {
   router.post('/users/login', loginUser);
 
   router.post('/users/logout', logout);
+
+  router.get('/users/login-status', loginStatus);
 
   return router;
 };

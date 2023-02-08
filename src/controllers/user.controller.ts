@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import dotenv from 'dotenv';
 dotenv.config();
 import { User, UserInput } from '../models/user.model';
+import Token from '../models/token.model';
 // eslint-disable-next-line max-len
 const secretz: any = !process.env.JWT_SECRET === undefined ? process.env.JWT_SECRET : '5ytjjfbPK8ZJ';
 // Generate Token
@@ -227,6 +227,7 @@ const logout = asyncHandler(async (req: any, res: any) => {
 const loginStatus = asyncHandler(async (req: any, res: any) => {
   const { token } = req.cookies;
 
+  console.log('Cookies: ', token);
   if (!token) {
     return res.json(false);
   }
@@ -239,5 +240,126 @@ const loginStatus = asyncHandler(async (req: any, res: any) => {
   return res.json(false);
 });
 
+// const forgotPassword = asyncHandler(async (req, res) => {
+//   const { email } = req.body;
+//   const user = await User.findOne({ email });
+
+//   if (!user) {
+//     res.status(404).json({ message: 'User does not exist' });
+//   }
+
+//   // Delete token if it exists in DB
+//   const token = await Token.findOne({ userId: user?.id });
+
+//   if (token) {
+//     await token.deleteOne();
+//   }
+
+//   // Create Reset Token
+//   const resetToken = crypto.randomBytes(32).toString('hex') + user._id;
+
+//   console.log(resetToken);
+
+//   // Hash token before saving to DB
+//   // eslint-disable-next-line max-len
+//   const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+//   // Save Token to DB
+//   await new Token({
+//     userId: user?._id,
+//     token: hashedToken,
+//     createdAt: Date.now(),
+//     expiresAt: Date.now() + 30 * (60 * 1000), // Thirty minutes
+//   }).save();
+
+//   // Construct Reset Url
+//   const resetUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+
+//   // Reset Email
+//   const message = `
+//       <h2>Hello ${user?.fullName}</h2>
+//       <p>Please use the url below to reset your password</p>  
+//       <p>This reset link is valid for only 30minutes.</p>
+//       <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+//       <p>Regards...</p>
+//       <p>Pinvent Team</p>
+//     `;
+//   const subject = 'Password Reset Request';
+//   const send_to = user?.email;
+//   const sent_from = process.env.EMAIL_USER;
+
+//   try {
+//     await sendEmail(subject, message, send_to, sent_from);
+//     res.status(200).json({ success: true, message: 'Reset Email Sent' });
+//   } catch (error) {
+//     res.status(500);
+//     throw new Error('Email not sent, please try again');
+//   }
+// });
+
+// Reset Password
+const resetPassword = asyncHandler(async (req, res) => {
+  const { password } = req.body;
+  const { resetToken } = req.params;
+
+  // Hash token, then compare to Token in DB
+  // eslint-disable-next-line max-len
+  const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+  // fIND tOKEN in DB
+  const userToken = await Token.findOne({
+    token: hashedToken,
+    expiresAt: { $gt: Date.now() },
+  });
+
+  if (!userToken) {
+    res.status(404);
+    throw new Error('Invalid or Expired Token');
+  }
+
+  // Find user
+  const user = await User.findOne({ _id: userToken.userId });
+
+  if (user) {
+    user.password = hashPassword(password);
+  }
+
+  await user?.save();
+  res.status(200).json({
+    message: 'Password Reset Successful, Please Login',
+  });
+});
+
+const changePassword = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findOne({ _id: id });
+  const { oldPassword, password } = req.body;
+
+  if (!user) {
+    res.status(400);
+    throw new Error('User not found, please signup');
+  }
+  //Validate
+  if (!oldPassword || !password) {
+    res.status(400).json({ message: 'Please add old and new password' });
+  }
+
+  const { salt } = user;
+  // check if old password matches password in DB
+
+  // eslint-disable-next-line max-len
+  const oldhash = crypto.pbkdf2Sync(oldPassword, salt, 100, 64, `sha512`).toString(`hex`);
+  const passwordIsCorrect = oldhash === user.password ? true : false;
+
+  // Save new password
+  if (user && passwordIsCorrect) {
+    user.password = hashPassword(password);
+    await user.save();
+    res.status(200).send('Password change successful');
+  } else {
+    res.status(400).json({ message: 'Old password is incorrect' });
+  }
+});
+
 // eslint-disable-next-line max-len
-export { createUser, deleteUser, getAllUsers, getUser, updateUser, loginUser, logout, loginStatus };
+export { createUser, deleteUser, getAllUsers, getUser, updateUser, loginUser, logout, loginStatus, changePassword, resetPassword };

@@ -12,6 +12,8 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// configure app.use middle-ware here to prevent route not found error
 app.use('/', roleRoute());
 
 app.get('/', (req, res) => {

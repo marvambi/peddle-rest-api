@@ -15,7 +15,7 @@ const createRole = async (req: Request, res: Response) => {
     description,
   };
 
-  const roleCreated = Role.create(roleInput);
+  const roleCreated = await Role.create(roleInput);
 
   return res.status(201).json({ data: roleCreated });
 };
@@ -29,7 +29,7 @@ const getAllRoles = async (req: Request, res: Response) => {
 const getRole = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const role = Role.findOne({ _id: id });
+  const role = await Role.findOne({ _id: id });
 
   if (!role) {
     return res.status(404).json({ message: `Role with id "${id}" not found.` });
@@ -42,7 +42,7 @@ const updateRole = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { description, name } = req.body;
 
-  const role = Role.findOne({ _id: id });
+  const role = await Role.findOne({ _id: id });
 
   if (!role) {
     return res.status(404).json({ message: `Role with id "${id}" not found.` });
@@ -54,9 +54,9 @@ const updateRole = async (req: Request, res: Response) => {
     });
   }
 
-  Role.updateOne({ _id: id }, { name, description });
+  await Role.updateOne({ _id: id }, { name, description });
 
-  const roleUpdated = Role.findById(id, { name, description });
+  const roleUpdated = await Role.findById(id, { name, description });
 
   return res.status(200).json({ data: roleUpdated });
 };
@@ -64,7 +64,7 @@ const updateRole = async (req: Request, res: Response) => {
 const deleteRole = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  Role.findByIdAndDelete(id);
+  await Role.findByIdAndDelete(id);
 
   return res.status(200).json({ message: 'Role deleted successfully.' });
 };

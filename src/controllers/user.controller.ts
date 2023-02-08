@@ -94,16 +94,11 @@ const getAllUsers = async (req: Request, res: Response) => {
       message: 'No users found',
     });
   }
-  // const users_to_return = users.map((user) => {
-  //   const { password, ...rest } = user;
-  //   const { _id, enabled, fullName, role } = rest;
 
-  //   return { _id, fullName, enabled, role };
-  // });
   const data = users.map((us) => {
     const { _id, email, enabled, fullName, role } = us;
 
-    return { _id, email, enabled, fullName, role };
+    return { _id, email, enabled, fullName, user_role: role['name'] };
   });
 
   return res.status(200).json({ data });

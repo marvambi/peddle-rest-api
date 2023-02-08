@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectToDatabase } from './mongoDBConnection';
+import { roleRoute } from './routes/role.route';
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/', roleRoute());
 
 app.get('/', (req, res) => {
   const checkSystem = (server: string, client: string) => {

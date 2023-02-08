@@ -1,27 +1,21 @@
 import { Router } from 'express';
+// eslint-disable-next-line max-len
+import { createRole, deleteRole, getAllRoles, getRole, updateRole } from '../controllers/role.controller';
 
 const roleRoute = () => {
   const router = Router();
 
-  router.post('/roles', (req, res) => {
-    // TODO logic for creating role
-  });
+  router.post('/roles', createRole);
 
-  router.get('/roles', (req, res) => {
-    // TODO logic for retrieving roles
-  });
+  router.get('/roles', getAllRoles);
 
-  router.get('/roles/:id', (req, res) => {
-    // TODO logic for retrieving role
-  });
+  router.get('/roles/:id', getRole);
 
-  router.put('/roles/:id', (req, res) => {
-    // TODO logic for updating role
-  });
+  router.put('/roles/:id', updateRole);
 
-  router.delete('/roles/:id', (req, res) => {
-    // TODO logic for deleting role
-  });
+  router.delete('/roles/:id', deleteRole);
 
   return router;
 };
+
+export { roleRoute };

@@ -1,7 +1,13 @@
 import { Request, Response } from 'express';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 import { User, UserInput } from '../models/user.model';
+
+// Generate Token
+const generateToken = (id: string) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+};
 
 const hashPassword = (password: string) => {
   const salt = crypto.randomBytes(16).toString('hex');
@@ -13,9 +19,24 @@ const hashPassword = (password: string) => {
 const createUser = async (req: Request, res: Response) => {
   const { email, enabled, fullName, password, role } = req.body;
 
+  // Validation
   if (!email || !fullName || !password || !role) {
     return res.status(422).json({
       message: 'The fields email, fullName, password and role are required',
+    });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({
+      message: 'Password must be up to 6 characters',
+    });
+  }
+
+  // check if user already exists
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    return res.status(400).json({
+      message: 'Email has already been registered',
     });
   }
 
@@ -29,7 +50,37 @@ const createUser = async (req: Request, res: Response) => {
 
   const userCreated = await User.create(userInput);
 
-  return res.status(201).json({ data: userCreated });
+  //   Generate Token
+  const token = generateToken(userCreated._id);
+  // Send HTTP-only cookie
+
+  res.cookie('token', token, {
+    path: '/',
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
+    sameSite: 'none',
+    secure: true,
+  });
+  if (userCreated) {
+    const { _id, email, enabled, fullName, role } = userCreated;
+
+    return res.status(201).json({
+      data: {
+        _id,
+        fullName,
+        email,
+        enabled,
+        role,
+        token,
+      },
+    });
+  } else {
+    res.status(400).json({
+      message: 'Invalid user data',
+    });
+  }
+
+  // return res.status(201).json({ data: userCreated });
 };
 
 const getAllUsers = async (req: Request, res: Response) => {

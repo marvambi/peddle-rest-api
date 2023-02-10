@@ -8,7 +8,7 @@ const productRoute = () => {
   const router = Router();
 
   // eslint-disable-next-line max-len
-  router.post('/product', upload.upload.single('image'), createProduct);
+  router.post('/product', protect, upload.upload.single('image'), createProduct);
   // eslint-disable-next-line max-len
   router.patch('/product/:id', protect, upload.upload.single('image'), updateProduct);
   router.get('/product', protect, getProducts);

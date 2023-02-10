@@ -1,10 +1,19 @@
 import asyncHandler from 'express-async-handler';
-import Product from '../models/product.model';
+import { Product } from '../models/product.model';
 import fileSizeFormatter from '../utils/fileUpload';
 import { v2 as cloudinary } from 'cloudinary';
+import { log } from 'console';
+import { rm } from 'fs';
 // Create Prouct
-const createProduct = asyncHandler(async (req: any, res: any) => {
-  const { category, description, name, price, quantity, sku } = req.body;
+
+cloudinary.config({
+  cloud_name: 'marvambi',
+  api_key: '814791677236547',
+  api_secret: 'tCN9l1aaaQuVgl3a7bNzWPpdxHM',
+  secure: true,
+});
+export const createProduct = asyncHandler(async (req: any, res: any) => {
+  const { category, description, name, price, quantity, sku, user } = req.body;
 
   //   Validation
   if (!name || !category || !quantity || !price || !description) {
@@ -24,22 +33,26 @@ const createProduct = asyncHandler(async (req: any, res: any) => {
         folder: 'Peddle Store',
         resource_type: 'image',
       });
+      delete uploadedFile['api_key'];
+      log(uploadedFile);
     } catch (error) {
       res.status(500);
-      throw new Error('Image could not be uploaded');
+      throw new Error(`Error: ${error}`);
     }
-
-    fileData = {
-      fileName: req.file.originalname,
-      filePath: uploadedFile.secure_url,
-      fileType: req.file.mimetype,
-      fileSize: fileSizeFormatter.fileSizeFormatter(req.file.size, 2),
-    };
+    if (uploadedFile) {
+      fileData = {
+        fileName: req.file.originalname,
+        filePath: uploadedFile.secure_url,
+        fileType: req.file.mimetype,
+        fileSize: fileSizeFormatter.fileSizeFormatter(req.file.size, 2),
+      };
+      rm(req.file.path, () => log);
+    }
   }
 
   // Create Product
   const product = await Product.create({
-    user: req.user.id,
+    user,
     name,
     sku,
     category,
@@ -53,14 +66,14 @@ const createProduct = asyncHandler(async (req: any, res: any) => {
 });
 
 // Get all Products
-const getProducts = asyncHandler(async (req, res) => {
+export const getProducts = asyncHandler(async (req: any, res: any) => {
   const products = await Product.find({ user: req.user.id }).sort('-createdAt');
 
   res.status(200).json(products);
 });
 
 // Get single product
-const getProduct = asyncHandler(async (req, res) => {
+const getAProd = asyncHandler(async (req: any, res: any) => {
   const product = await Product.findById(req.params.id);
   // if product doesnt exist
 
@@ -77,7 +90,7 @@ const getProduct = asyncHandler(async (req, res) => {
 });
 
 // Delete Product
-const deleteProduct = asyncHandler(async (req, res) => {
+export const deleteProduct = asyncHandler(async (req: any, res: any) => {
   const product = await Product.findById(req.params.id);
   // if product doesnt exist
 
@@ -95,7 +108,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 // Update Product
-const updateProduct = asyncHandler(async (req: any, res: any) => {
+export const updateProduct = asyncHandler(async (req: any, res: any) => {
   const { category, description, name, price, quantity } = req.body;
   const { id } = req.params;
 
@@ -133,7 +146,7 @@ const updateProduct = asyncHandler(async (req: any, res: any) => {
       fileName: req.file.originalname,
       filePath: uploadedFile.secure_url,
       fileType: req.file.mimetype,
-      fileSize: fileSizeFormatter(req.file.size, 2),
+      fileSize: fileSizeFormatter.fileSizeFormatter(req.file.size, 2),
     };
   }
 
@@ -157,10 +170,10 @@ const updateProduct = asyncHandler(async (req: any, res: any) => {
   res.status(200).json(updatedProduct);
 });
 
-module.exports = {
+export default {
   createProduct,
   getProducts,
-  getProduct,
+  getAProd,
   deleteProduct,
   updateProduct,
 };

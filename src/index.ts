@@ -8,7 +8,8 @@ import cors from 'cors';
 import { connectToDatabase } from './mongoDBConnection';
 import { roleRoute } from './routes/role.route';
 import { userRoute } from './routes/user.route';
-import path from "path";
+import { productRoute } from './routes/product.route';
+import path from 'path';
 
 dotenv.config();
 
@@ -22,9 +23,9 @@ const corsOptions = {
 };
 
 app.use(bodyParser.json());
-app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -32,6 +33,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // configure app.use middle-ware here to prevent route not found error
 app.use('/', roleRoute());
 app.use('/', userRoute());
+app.use('/', productRoute());
 
 app.get('/', (req, res) => {
   const checkSystem = (server: string, client: string) => {

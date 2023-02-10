@@ -1,4 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
+
+type ProductDocument = Document & {
+  name: string;
+  user: string;
+  sku: string;
+  category: string;
+  price: string;
+  quantity: string;
+  description: string | null;
+  image: object;
+};
+
+type ProductInput = {
+  name: ProductDocument['name'];
+  user: ProductDocument['user'];
+  sku: ProductDocument['sku'];
+  category: ProductDocument['category'];
+  price: ProductDocument['price'];
+  quantity: ProductDocument['quantity'];
+  description: ProductDocument['description'];
+  image: ProductDocument['image'];
+};
 
 const productSchema = new mongoose.Schema(
   {
@@ -8,33 +30,33 @@ const productSchema = new mongoose.Schema(
       ref: 'User',
     },
     name: {
-      type: String,
+      type: mongoose.Schema.Types.String,
       required: [true, 'Please add a name'],
       trim: true,
     },
     sku: {
-      type: String,
+      type: mongoose.Schema.Types.String,
       required: true,
       default: 'SKU',
       trim: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.String,
       required: [true, 'Please add a category'],
       trim: true,
     },
     quantity: {
-      type: String,
+      type: mongoose.Schema.Types.String,
       required: [true, 'Please add a quantity'],
       trim: true,
     },
     price: {
-      type: String,
+      type: mongoose.Schema.Types.String,
       required: [true, 'Please add a price'],
       trim: true,
     },
     description: {
-      type: String,
+      type: mongoose.Schema.Types.String,
       required: [true, 'Please add a description'],
       trim: true,
     },
@@ -48,6 +70,7 @@ const productSchema = new mongoose.Schema(
   },
 );
 
-const Product = mongoose.model('Product', productSchema);
+// eslint-disable-next-line max-len
+const Product: Model<ProductDocument> = mongoose.model<ProductDocument>('Product', productSchema);
 
-export default Product;
+export { Product, ProductInput, ProductDocument };

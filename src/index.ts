@@ -18,7 +18,8 @@ const PORT = parseInt(process.env.PORT || '4500');
 
 const app = express();
 const corsOptions = {
-  origin: ['http://localhost:8081', 'https://peddle-app.vercel.app'],
+  // eslint-disable-next-line max-len
+  origin: ['http://localhost:8081', 'http://localhost:3000', 'https://63e7bddb54858c000859a043--darling-rolypoly-632b11.netlify.app/'],
   credentials: true,
 };
 

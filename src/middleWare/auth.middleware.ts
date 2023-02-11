@@ -8,11 +8,11 @@ const protect = asyncHandler(async (req: any, res: any, next) => {
 
     if (!token) {
       res.status(401);
-      throw new Error('Not authorized, please login');
+      throw new Error('Not authorization token, please login');
     }
 
     // Verify Token
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    const verified = jwt.verify(token, '5ytjjfbPK8ZJ');
     // Get user id from token
     const user = await User.findById(verified.id).select('-password');
 
@@ -24,7 +24,7 @@ const protect = asyncHandler(async (req: any, res: any, next) => {
     next();
   } catch (error) {
     res.status(401);
-    throw new Error('Not authorized, please login');
+    throw new Error(`Error: ${error}`);
   }
 });
 

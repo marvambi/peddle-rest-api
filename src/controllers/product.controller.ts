@@ -34,7 +34,7 @@ export const createProduct = asyncHandler(async (req: any, res: any) => {
         resource_type: 'image',
       });
       delete uploadedFile['api_key'];
-      log(uploadedFile);
+      // log(uploadedFile);
     } catch (error) {
       res.status(500);
       throw new Error(`Error: ${error}`);

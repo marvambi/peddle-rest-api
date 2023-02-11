@@ -232,7 +232,7 @@ const loginStatus = asyncHandler(async (req: any, res: any) => {
     return res.json(false);
   }
   // Verify Token
-  const verified = jwt.verify(token, process.env.JWT_SECRET);
+  const verified = jwt.verify(token, '5ytjjfbPK8ZJ');
 
   if (verified) {
     return res.json(true);

@@ -19,7 +19,7 @@ const userRoute = () => {
 
   router.post('/users/logout', logout);
 
-  router.get('/users/login-status', loginStatus);
+  router.get('/users/login-status/:id', loginStatus);
 
   return router;
 };

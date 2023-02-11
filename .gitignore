@@ -116,4 +116,5 @@ dist
 
 .idea
 build
+uploads/*.*
 data

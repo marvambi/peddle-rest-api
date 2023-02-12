@@ -19,14 +19,28 @@ const PORT = parseInt(process.env.PORT || '80');
 const app = express();
 const corsOptions = {
   // eslint-disable-next-line max-len
-  origin: ['http://localhost:3000', 'https://main--darling-rolypoly-632b11.netlify.app'],
+  allowed_origins: ['http://localhost:3000', 'https://main--darling-rolypoly-632b11.netlify.app'],
   credentials: true,
 };
 
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
+// eslint-disable-next-line max-len
+const ALLOWED_ORIGINS = ['http://localhost:3000', 'https://main--darling-rolypoly-632b11.netlify.app'];
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  // eslint-disable-next-line max-len
+  const theOrigin = ALLOWED_ORIGINS.indexOf(`${origin}`) >= 0 ? origin : ALLOWED_ORIGINS[1];
+
+  res.header('Access-Control-Allow-Origin', theOrigin);
+  // eslint-disable-next-line max-len
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+  next();
+});
+//app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

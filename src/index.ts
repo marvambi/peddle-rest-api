@@ -14,12 +14,12 @@ import path from 'path';
 dotenv.config();
 
 const HOST = process.env.HOST || 'http://localhost';
-const PORT = parseInt(process.env.PORT || '4500');
+const PORT = parseInt(process.env.PORT || '80');
 
 const app = express();
 const corsOptions = {
   // eslint-disable-next-line max-len
-  origin: ['http://localhost:8081', 'http://localhost:3000', 'https://63e7bddb54858c000859a043--darling-rolypoly-632b11.netlify.app/'],
+  origin: ['http://localhost:3000', 'https://63e7bddb54858c000859a043--darling-rolypoly-632b11.netlify.app/'],
   credentials: true,
 };
 

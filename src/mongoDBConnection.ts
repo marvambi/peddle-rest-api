@@ -20,7 +20,7 @@ const connectToDatabase = async (): Promise<void> => {
   // eslint-disable-next-line max-len
   // await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, options);
   // eslint-disable-next-line max-len
-  await mongoose.connect(`mongodb+srv://marvambi:XPresent01A@dotsafety.uwefs.mongodb.net/peddle?retryWrites=true&w=majority`, options);
+  await mongoose.connect(`${process.env.DB_URI}`, options);
 };
 
 export { connectToDatabase };
